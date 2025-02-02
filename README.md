@@ -29,9 +29,9 @@ Lets take a look inside the `src` folder
   ```
  - In the root directory create a `.env` file and the following env variables.
     ex:
-    ```
-    PORT=3000
-    ```
+  ```
+  PORT=3000
+  ```
 
  - Inside the `src/config` folder create a file named as `config.json` and write the following code:
  ```
