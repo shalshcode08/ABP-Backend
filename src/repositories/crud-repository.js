@@ -38,7 +38,7 @@ class CrudRepository {
             return response;
         }
         catch(error){
-            Logger.error("something went wrong in the crud repo : destroy");
+            Logger.error("something went wrong in the crud repo : get");
             throw error;
         }
     }
@@ -49,7 +49,7 @@ class CrudRepository {
             return response;
         }
         catch(error){
-            Logger.error("something went wrong in the crud repo : destroy");
+            Logger.error("something went wrong in the crud repo : getAll");
             throw error;
         }
     }
@@ -64,7 +64,7 @@ class CrudRepository {
             return response;
         }
         catch(error){
-            Logger.error("something went wrong in the crud repo : destroy");
+            Logger.error("something went wrong in the crud repo : update");
             throw error;
         }
     }
