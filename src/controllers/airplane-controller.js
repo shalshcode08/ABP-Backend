@@ -42,8 +42,20 @@ async function getAirplaneById(req, res) {
     return res.status(StatusCodes.NOT_FOUND).json(ErrorResponse);
   }
 }
+
+async function deleteAirplaneById(req, res){
+  try {
+    const response = await AirplaneService.destroyAirplane(req.params.id);
+    SuccessResponse.data = response;
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
+  }
+}
+
 module.exports = {
   createAirplane,
   getAirplanes,
   getAirplaneById,
+  deleteAirplaneById,
 };
