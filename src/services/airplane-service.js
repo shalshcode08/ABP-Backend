@@ -49,9 +49,20 @@ async function destroyAirplane(id){
     }
 }
 
+async function updateAirplane(id, data){
+  try {
+    const response = await airplaneRepository.update(id, data);
+    return response;
+  } catch (error) {
+    StatusCodes.BAD_REQUEST;
+    console.log("error", error);
+  }
+}
+
 module.exports = {
   createAirplane,
   getAirplanes,
   getAirplaneById,
   destroyAirplane,
+  updateAirplane,
 };

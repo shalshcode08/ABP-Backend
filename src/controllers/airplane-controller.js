@@ -53,9 +53,24 @@ async function deleteAirplaneById(req, res){
   }
 }
 
+async function updateAirplaneById(req,res){
+  try{
+    const response = await AirplaneService.updateAirplane(req.params.id, {
+      modelNumber : req.body.modelNumber,
+      capacity : req.body.capacity,
+    }
+    )
+    SuccessResponse.data = response;
+  } catch(error){
+    ErrorResponse.error = error;
+    return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+  }
+}
+
 module.exports = {
   createAirplane,
   getAirplanes,
   getAirplaneById,
   deleteAirplaneById,
+  updateAirplaneById,
 };
