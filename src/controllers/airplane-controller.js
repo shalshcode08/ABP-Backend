@@ -1,13 +1,9 @@
 const { AirplaneService } = require("../services");
 const { StatusCodes } = require("http-status-codes");
 const { ErrorResponse, SuccessResponse } = require("../utils/common");
+const { BadRequestError, NotFoundError, InternalServerError } = require("../utils/errors/app-error");
 
-/**
- *  POST : /airplanes
- * req-body {modelNumber : "airbus320", capacity : 100}
- */
-
-async function createAirplane(req, res) {
+async function createAirplane(req, res, next) {
   try {
     const airplane = await AirplaneService.createAirplane({
       modelNumber: req.body.modelNumber,
@@ -16,54 +12,63 @@ async function createAirplane(req, res) {
     SuccessResponse.data = airplane;
     return res.status(StatusCodes.CREATED).json(SuccessResponse);
   } catch (error) {
-    ErrorResponse.error = error;
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
+    next(new InternalServerError(error.message));
   }
 }
 
-async function getAirplanes(req, res) {
+async function getAirplanes(req, res, next) {
   try {
     const airplanes = await AirplaneService.getAirplanes();
     SuccessResponse.data = airplanes;
     return res.status(StatusCodes.OK).json(SuccessResponse);
   } catch (error) {
     ErrorResponse.error = error;
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
+    next(new InternalServerError(error.message));
   }
 }
 
-async function getAirplaneById(req, res) {
+async function getAirplaneById(req, res, next) {
   try {
     const airplane = await AirplaneService.getAirplaneById(req.params.id);
+    if (!airplane) {
+      throw new NotFoundError("Airplane not found");
+    }
     SuccessResponse.data = airplane;
     return res.status(StatusCodes.OK).json(SuccessResponse);
   } catch (error) {
     ErrorResponse.error = error;
-    return res.status(StatusCodes.NOT_FOUND).json(ErrorResponse);
+    next(error);
   }
 }
 
-async function deleteAirplaneById(req, res){
+async function deleteAirplaneById(req, res, next) {
   try {
     const response = await AirplaneService.destroyAirplane(req.params.id);
+    if (!response) {
+      throw new BadRequestError("Airplane not found");
+    }
     SuccessResponse.data = response;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
   } catch (error) {
     ErrorResponse.error = error;
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
+    next(error);
   }
 }
 
-async function updateAirplaneById(req,res){
-  try{
+async function updateAirplaneById(req, res, next) {
+  try {
     const response = await AirplaneService.updateAirplane(req.params.id, {
-      modelNumber : req.body.modelNumber,
-      capacity : req.body.capacity,
+      modelNumber: req.body.modelNumber,
+      capacity: req.body.capacity,
+    });
+    if (!response) {
+      throw new BadRequestError("Airplane not found");
     }
-    )
     SuccessResponse.data = response;
-  } catch(error){
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
     ErrorResponse.error = error;
-    return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+    next(error);
   }
 }
 

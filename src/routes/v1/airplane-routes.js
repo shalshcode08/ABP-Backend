@@ -4,7 +4,7 @@ const {AirplaneMiddleware} = require("../../middleware");
 
 const router = express.Router();
 
-// -> /api/v1/airplane *POST
+// -> /api/v1/airplane * POST, GET, PUT, DELETE
 router.post("/", AirplaneMiddleware.validateCreateRequest, AirplaneController.createAirplane);
 router.get("/", AirplaneController.getAirplanes);
 router.get("/:id", AirplaneController.getAirplaneById);

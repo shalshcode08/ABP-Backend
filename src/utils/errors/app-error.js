@@ -1,11 +1,33 @@
-class appError extends Error {
-    constructor(message, statusCode){
-        super(message);
-        this.statusCode = statusCode;
-        this.explanation = message;
-    }
+class AppError extends Error {
+  constructor(message, statusCode) {
+    super(message);
+    this.statusCode = statusCode;
+    this.isOperational = true;
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+
+class BadRequestError extends AppError {
+  constructor(message) {
+    super(message || "Bad Request", 400);
+  }
+}
+
+class NotFoundError extends AppError {
+  constructor(message) {
+    super(message || "Not Found", 404);
+  }
+}
+
+class InternalServerError extends AppError {
+  constructor(message) {
+    super(message || "Internal Server Error", 500);
+  }
 }
 
 module.exports = {
-    appError,
-}
+  AppError,
+  BadRequestError,
+  NotFoundError,
+  InternalServerError,
+};
